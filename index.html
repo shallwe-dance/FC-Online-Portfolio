@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sewoong Jeong - Portfolio</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+        }
+
+        .stage {
+
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scene {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            width: min(100vw, 100vh * 16 / 9);
+            height: min(100vh, 100vw * 9 / 16);
+        }
+
+        /* 배경 이미지를 좌표 기준으로 */
+        .bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .player {
+            position: absolute;
+            width: 6%;
+            transform: translateX(-50%);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .player {
+            transition: transform 0.35s ease, filter 0.35s ease;
+        }
+
+        .player:hover {
+            transform: translateX(-50%) scale(1.15);
+            filter:
+                drop-shadow(0 0 8px rgba(255, 200, 100, 0.6)) drop-shadow(0 0 18px rgba(255, 200, 100, 0.35));
+        }
+
+        .player-label {
+            margin-top: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+
+            font-family: 'Inter', 'Pretendard', sans-serif;
+            font-size: clamp(10px, 0.9vw, 13px);
+            color: white;
+        }
+
+        .uniform-img {
+            width: 100%;
+            display: block;
+        }
+
+
+
+
+
+        /* 공격수 */
+        .u1 {
+            left: 33.5%;
+            top: 24.5%;
+        }
+
+        /* 미드필더 */
+        .u2 {
+            left: 33.5%;
+            top: 39.5%;
+        }
+
+        /* 수비1 */
+        .u3 {
+            left: 27.5%;
+            top: 54.5%;
+        }
+
+        /* 수비2 */
+        .u4 {
+            left: 39.5%;
+            top: 54.5%;
+        }
+
+
+        /* 기존 유니폼 가리기 */
+        .u5 {
+            bottom: 9.5%;
+            right: 20.25%;
+            filter: brightness(0.45);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .pos {
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 0.75em;
+        }
+
+        /* 포지션별 색 */
+        .pos.mf {
+            background: #5fd35f;
+        }
+
+        /* Midfielder */
+        .pos.fw {
+            background: #ff6b6b;
+        }
+
+        .pos.df {
+            background: #4dabf7;
+        }
+
+        .pos.gk {
+            background: #f3d55b;
+        }
+
+        .num {
+            font-weight: 700;
+            opacity: 0.9;
+        }
+
+        .name {
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* ===== Modal Base ===== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+        }
+
+        /* ===== FC Modal ===== */
+        .fc-modal {
+            position: relative;
+            width: min(760px, 92vw);
+            background: #fff;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        /* 헤더 */
+        .fc-header {
+            background: #2ecc71;
+            color: white;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fc-badge {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .fc-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* 콘텐츠 */
+        .fc-content {
+            display: flex;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .fc-left img {
+            width: 120px;
+        }
+
+        .fc-right h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+
+        .fc-meta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .fc-right p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* 태그 */
+        .fc-tags {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 6px;
+            margin: 12px 0 20px;
+        }
+
+        .fc-tags li {
+            font-size: 12px;
+            padding: 4px 8px;
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .fc-btn {
+            display: inline-block;
+            background: #2ecc71;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .fc-btn.secondary {
+            background: #eaeaea;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stage">
+        <div class="scene">
+
+            <img src="./images/background.jpg" class="bg" />
+
+            <!-- 공격수 -->
+            <div class="player u1" data-name="bias-a-thon" data-pos="FW" data-num="'25"
+                data-desc="[Track 1]<br>
+                -프로젝트 설명 : 강화학습 수업에서 기말 대체 과제로 수행한 프로젝트입니다. 강화학습을 통해 ChatGPT-4 모델에 내재된 사회적 편향을 발견합니다.
+                기존 고정 반복 실험 대비 탐색 효율을 크게 개선한 것이 특징입니다.<br>
+
+                <br>-프로젝트 진행<br>
+                1. Bias 함수 설계(<u>LLM 응답 수치화</u>) - 관련 주제를 다룬 논문에서 bias 계산식을 그대로 차용<br>
+                2. 데이터셋 구축 - 논문 깃허브에서 데이터 원본 다운로드. 번역 뒤 우리나라 정서에 맞게 데이터 추가<br>
+                3. 코드 작성 - 강화학습을 통해 LLM이 편향을 가지고 있는지 탐색. <u>exploitation과 exploration의 적절한 비율을 맞추기 위해 노력</u><br>
+                4. 결과 확인 - LLM이 특별히 편향을 가지고 있는 주제 확인, 실제 대화를 통해 편향 예시 확인<br>
+
+                <br>[Track 2]<br>
+                -프로젝트 설명 : 주어진 상황 설명과 질문을 바탕으로 LLM이 공정하고 중립적인 응답을 생성하는 프롬프트를 개발했습니다.
+                특히, 억측을 방지하고 모르는 것을 모른다고 응답하는 '인식적 겸손'을 신경써야 했습니다.
+                Track 1에 집중하기 위해 참가에 의의를 뒀지만, <u>퀀타이제이션을 활용한 최적화 경험</u>을 건질 수 있었습니다.
+                " 
+                data-tags="RL,LLM,Prompt,Optimization"
+                data-link-main="https://github.com/shallwe-dance/LLM-implicit-bias-exploitation">
+
+                <img src="./images/uniform.png" class="uniform-img" />
+                <div class="player-label">
+                    <span class="pos fw">FW</span>
+                    <span class="num">'25</span>
+                    <span class="name">bias-a-thon</span>
+                </div>
+            </div>
+
+            <!-- 미드필더 -->
+            <div class="player u2" data-name="초월조아" data-pos="MF" data-num="'25"
+                data-desc="-프로젝트 설명 : 스마일게이트RPG의 게임 '로스트아크'에는 '초월'이라는 장비 강화 콘텐츠가 있습니다.
+                게임사에서 공개한 확률을 조합해서, 최소한의 비용으로 유저가 원하는 등급을 달성할 수 있게 돕는 계산기 겸 시뮬레이터를 만들었습니다.
+                유저의 인게임 결과를 입력 받으면, 유저가 원하는 목표를 달성할 확률과 함께 더이상 재화를 소비하는 게 이득일지 손해일지 계산하고 최적의 행동을 추천합니다.<br>
+                <strong>게임 도메인의 AI가 유저의 플레이 경험 제고에 도움이 된다는 사실을 몸소 체감했습니다.</strong><br>
+                
+                <br>-프로젝트 진행<br>
+                1. UI 디자인 - 좋은 UI가 사용자를 부른다고 생각합니다. 최대한 직관적이고 간단한 디자인을 고수하면서, 인게임 내 배경 색과 비슷한 색을 테마로 채용했습니다.<br>
+                2. 프론트엔드 로직 - 특수타일(랜덤으로 n칸 이동, 나온 수의 n배 이동) 구현, 엣지 케이스 해결<br>
+                3. 백엔드 연결 - 턴마다 현재 게임판 상태를 서버로 전송. 이를 기반으로 확률 계산<br>
+                4. 확률 계산 및 추천 - DP로 확률 계산. <strong>사용자는 확률보다 이분법적인 추천을 선호할 것이라고 판단(do/don't) -> 추천 알고리즘 설계</strong><br>
+                5. 배포 준비 - 배포 환경 분리, 로그 파일 생성, 다양한 접속 환경 고려, 문의하기 기능 구현, 정보보호 솔루션 적용<br>
+                6. 배포 및 유지보수
+                " 
+                data-tags="Web,AI,Automation"
+                data-link-main="https://chowoljoa.com/ko/">
+
+                <img src="./images/uniform.png" class="uniform-img" />
+                <div class="player-label">
+                    <span class="pos mf">MF</span>
+                    <span class="num">'25</span>
+                    <span class="name">초월조아</span>
+                </div>
+            </div>
+
+            <!-- 수비 1 -->
+            <div class="player u3" data-name="URP" data-pos="DF" data-num="'25"
+                data-desc="
+                프로젝트 개요 : 1년 동안 분산 시스템을 주제로 우수학부생 연구학점제에 참여하며 진행한 프로젝트입니다.<br>
+                <br>[1학기]<br>-프로젝트 설명 : 분산 LSM-tree를 구현한 Nova-LSM 논문을 읽고 실험을 재현했습니다.
+                재현 과정에서 노드 개수가 적은 환경(3개 이하)에서 쓰기 연산 성능이 극히 느리다는 사실을 발견한 뒤, 보고서를 작성하여 A+를 받았습니다.<br>
+                <br>[2학기]<br>
+                -프로젝트 설명 : NVMe-oF 프로토콜로 통신하는 분산 환경에서 RPC 연산의 부하를 줄이기 위한 방법을 개발 중입니다.
+                
+                " 
+                data-tags="System,Distributed,Performance"
+                data-link-main="https://github.com/racheliee/NovaLSM" data-link-sub="https://github.com/racheliee/urp2025/tree/finegrained"
+                data-link-sub-label="자세히 보기2">
+
+                <img src="./images/uniform.png" class="uniform-img" />
+                <div class="player-label">
+                    <span class="pos df">DF</span>
+                    <span class="num">'25</span>
+                    <span class="name">URP</span>
+                </div>
+            </div>
+
+            <!-- 수비 2 -->
+            <div class="player u4" data-name="OS & multicore" data-pos="DF" data-num="'25"
+                data-desc="[OS(xv6)]<br>운영체제 수업에서 xv6 운영체제에 다양한 기능들을 추가하고 수정하는 과제를 수행했습니다. (시스템콜, 스케줄러, 메모리맵핑, 페이지스왑, 파일시스템)<br>
+                <br>[multicore]<br>멀티코어컴퓨팅 수업에서 pthread, Openmp, 2 Phase Commit, cuda 과제를 수행했습니다.
+                <br><br>인공지능을 공부하는 학생으로서, 평소 로우 레벨 최적화를 중요하게 생각하고 있습니다. 특히 직무와 밀접한 과제는 다음과 같습니다.<br>
+                -페이지 스왑 구현 : xv6 운영체제에 swap in, swap out을 구현했습니다. 큰 데이터를 처리해야 하는 경우 OOM이 발생하기 쉬운데, 페이징을 통해 해결 가능합니다.<br>
+                -pthread : 쓰레드 프로그래밍을 통해 병렬 처리를 이해했습니다. 배리어가 적절하게 사용 됐는지, 변수들의 scope이 잘 지정 됐는지 여부가 성능에 큰 영향을 끼쳤습니다.<br>
+                -2PC(2 Phase Commit) : 분산 DB에서 트랜잭션을 수행하기 위한 프로토콜입니다. 처리하는 데이터가 커지면서 분산 학습을 하는 경우가 많아졌습니다. 그렇기에 분산 시스템의 이해가 중요하다고 생각합니다.
+                "
+                data-tags="OS,Multicore,Distributed,GPU" data-link-main="https://github.com/shallwe-dance/xv6"
+                data-link-sub="https://github.com/shallwe-dance/multicore" data-link-sub-label="자세히 보기2">
+
+                <img src="./images/uniform.png" class="uniform-img" />
+                <div class="player-label">
+                    <span class="pos df">DF</span>
+                    <span class="num">'25</span>
+                    <span class="name">OS & multicore</span>
+                </div>
+            </div>
+
+
+
+            <!-- 기존 유니폼 가리기 -->
+            <div class="player u5">
+                <img src="./images/uniform.png" class="uniform-img" alt="Uniform 5" />
+            </div>
+        </div>
+    </div>
+
+    <div id="player-modal" class="modal hidden">
+        <div class="modal-overlay"></div>
+
+        <div class="fc-modal">
+            <!-- 헤더 -->
+            <div class="fc-header">
+                <span class="fc-badge">프로젝트 상세</span>
+                <button class="fc-close">✕</button>
+            </div>
+
+            <!-- 본문 -->
+            <div class="fc-content">
+                <div class="fc-left">
+                    <img id="modal-uniform" src="./images/uniform.png" />
+                </div>
+
+                <div class="fc-right">
+                    <h2 id="modal-name">bias-a-thon</h2>
+
+                    <div class="fc-meta">
+                        <span id="modal-pos" class="pos fw">FW</span>
+                        <span id="modal-num">25</span>
+                    </div>
+
+                    <p id="modal-desc">
+                        강화학습 기반 LLM Bias Detection 프로젝트로,
+                        기존 고정 반복 실험 대비 탐색 효율을 크게 개선했습니다.
+                    </p>
+
+                    <ul class="fc-tags">
+                        <li>RL</li>
+                        <li>LLM</li>
+                        <li>System</li>
+                    </ul>
+
+                    <div class="modal-footer" id="modal-actions">
+                        <!-- JS가 버튼을 여기에 넣음 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    const modal = document.getElementById("player-modal");
+    const actions = document.getElementById("modal-actions");
+
+    document.querySelectorAll(".player").forEach(player => {
+        player.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+
+            // 기본 정보
+            document.getElementById("modal-name").textContent = player.dataset.name;
+            document.getElementById("modal-pos").textContent = player.dataset.pos;
+            document.getElementById("modal-num").textContent = player.dataset.num;
+            document.getElementById("modal-desc").innerHTML = player.dataset.desc;
+
+            // 포지션 색상
+            const posEl = document.getElementById("modal-pos");
+            posEl.className = "pos " + player.dataset.pos.toLowerCase();
+
+            // 태그
+            const tagWrap = document.querySelector(".fc-tags");
+            tagWrap.innerHTML = "";
+            player.dataset.tags.split(",").forEach(tag => {
+                const li = document.createElement("li");
+                li.textContent = tag.trim();
+                tagWrap.appendChild(li);
+            });
+
+            // 🔥 버튼 렌더링
+            actions.innerHTML = "";
+
+            // 메인 버튼
+            const mainBtn = document.createElement("a");
+            mainBtn.href = player.dataset.linkMain;
+            mainBtn.target = "_blank";
+            mainBtn.className = "fc-btn";
+            mainBtn.textContent = "자세히 보기";
+            actions.appendChild(mainBtn);
+
+            // 서브 버튼 (있을 때만)
+            if (player.dataset.linkSub) {
+                const subBtn = document.createElement("a");
+                subBtn.href = player.dataset.linkSub;
+                subBtn.target = "_blank";
+                subBtn.className = "fc-btn";
+                subBtn.textContent = player.dataset.linkSubLabel || "추가 자료";
+                actions.appendChild(subBtn);
+            }
+        });
+    });
+
+    // 닫기
+    document.querySelector(".fc-close").onclick = closeModal;
+    document.querySelector(".modal-overlay").onclick = closeModal;
+
+    function closeModal() {
+        modal.classList.add("hidden");
+    }
+</script>
