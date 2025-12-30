@@ -1,0 +1,260 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+}
+
+.stage {
+
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scene {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: min(100vw, 100vh * 16 / 9);
+    height: min(100vh, 100vw * 9 / 16);
+}
+
+/* 배경 이미지를 좌표 기준으로 */
+.bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.player {
+    position: absolute;
+    width: 6%;
+    transform: translateX(-50%);
+    text-align: center;
+    cursor: pointer;
+}
+
+.player {
+    transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.player:hover {
+    transform: translateX(-50%) scale(1.15);
+    filter:
+        drop-shadow(0 0 8px rgba(255, 200, 100, 0.6)) drop-shadow(0 0 18px rgba(255, 200, 100, 0.35));
+}
+
+.player-label {
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    font-family: 'Inter', 'Pretendard', sans-serif;
+    font-size: clamp(10px, 0.9vw, 13px);
+    color: white;
+}
+
+.uniform-img {
+    width: 100%;
+    display: block;
+}
+
+
+
+
+
+/* 공격수 */
+.u1 {
+    left: 33.5%;
+    top: 24.5%;
+}
+
+/* 미드필더 */
+.u2 {
+    left: 33.5%;
+    top: 39.5%;
+}
+
+/* 수비1 */
+.u3 {
+    left: 27.5%;
+    top: 54.5%;
+}
+
+/* 수비2 */
+.u4 {
+    left: 39.5%;
+    top: 54.5%;
+}
+
+
+/* 기존 유니폼 가리기 */
+.u5 {
+    bottom: 9.5%;
+    right: 20.25%;
+    filter: brightness(0.45);
+    cursor: default;
+    pointer-events: none;
+}
+
+.pos {
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 0.75em;
+}
+
+/* 포지션별 색 */
+.pos.mf {
+    background: #5fd35f;
+}
+
+/* Midfielder */
+.pos.fw {
+    background: #ff6b6b;
+}
+
+.pos.df {
+    background: #4dabf7;
+}
+
+.pos.gk {
+    background: #f3d55b;
+}
+
+.num {
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+.name {
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+/* ===== Modal Base ===== */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+/* ===== FC Modal ===== */
+.fc-modal {
+    position: relative;
+    width: min(760px, 92vw);
+    background: #fff;
+    margin: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* 헤더 */
+.fc-header {
+    background: #2ecc71;
+    color: white;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fc-badge {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.fc-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+}
+
+/* 콘텐츠 */
+.fc-content {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+}
+
+.fc-left img {
+    width: 120px;
+}
+
+.fc-right h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.fc-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.fc-right p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* 태그 */
+.fc-tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 6px;
+    margin: 12px 0 20px;
+}
+
+.fc-tags li {
+    font-size: 12px;
+    padding: 4px 8px;
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.fc-btn {
+    display: inline-block;
+    background: #2ecc71;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.fc-btn.secondary {
+    background: #eaeaea;
+    color: #333;
+}
