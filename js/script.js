@@ -60,8 +60,6 @@ window.addEventListener("load", () => {
     const toast = document.getElementById("guide-toast");
     const confirmBtn = document.getElementById("guide-confirm");
 
-    if (localStorage.getItem("guideShown")) return;
-
     toast.classList.remove("hidden");
 
     confirmBtn.addEventListener("click", () => {
@@ -69,3 +67,4 @@ window.addEventListener("load", () => {
         localStorage.setItem("guideShown", "true");
     });
 });
+
