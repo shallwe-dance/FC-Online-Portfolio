@@ -24,7 +24,7 @@ document.querySelectorAll(".player").forEach(player => {
             tagWrap.appendChild(li);
         });
 
-        // 🔥 버튼 렌더링
+        // 버튼 렌더링
         actions.innerHTML = "";
 
         // 메인 버튼
@@ -54,3 +54,18 @@ document.querySelector(".modal-overlay").onclick = closeModal;
 function closeModal() {
     modal.classList.add("hidden");
 }
+
+//로드될 때 안내
+window.addEventListener("load", () => {
+    const toast = document.getElementById("guide-toast");
+    const confirmBtn = document.getElementById("guide-confirm");
+
+    if (localStorage.getItem("guideShown")) return;
+
+    toast.classList.remove("hidden");
+
+    confirmBtn.addEventListener("click", () => {
+        toast.classList.add("hidden");
+        localStorage.setItem("guideShown", "true");
+    });
+});
